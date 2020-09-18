@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/am_audio/fullDuplex.c \
 ../src/am_audio/sound.c 
 
 OBJS += \
+./src/am_audio/fullDuplex.o \
 ./src/am_audio/sound.o 
 
 C_DEPS += \
+./src/am_audio/fullDuplex.d \
 ./src/am_audio/sound.d 
 
 

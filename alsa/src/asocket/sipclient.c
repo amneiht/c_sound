@@ -60,7 +60,7 @@ int asock_m_acceptInvite(asip_d_mess *invite, char *name,
 
 	n = sendto(sockfd, buf, n, 0, (struct sockaddr*) ser,
 			sizeof(struct sockaddr));
-	printf("mess :\n%s \n", buf);
+//	printf("mess :\n%s \n", buf);
 	asip_m_freeMess(mess);
 	return 1;
 	// loi thong tin thi gui thong tin huy
@@ -69,12 +69,19 @@ int asock_m_acceptInvite(asip_d_mess *invite, char *name,
 int asock_m_cancleInvite(asip_d_mess *invite, char *name,
 		struct sockaddr_in *ser, int sockfd) {
 	asip_d_mess *mess = null;
-	asip_m_addHeader(&mess, asip_d_Header_Type, "cancel");
+	char *id = asip_m_findHeaderValue(invite, "id");
+	char *to = asip_m_findHeaderValue(invite, "from");
+	char *port = asip_m_findHeaderValue(invite, "port");
+	if (id == NULL || to == NULL || port == NULL) {
+		printf(__FILE__"mess null parameter \n");
+		return -1;
+	}
+	asip_m_addHeader(&mess, asip_d_Header_Type, asip_d_Type_Cancel);
 	asip_m_addHeader(&mess, asip_d_Header_From, name);
-	char *ip = asip_m_findHeaderValue(invite, "ip");
-	char *to = asip_m_findHeaderValue(invite, "to");
+
 	asip_m_addHeader(&mess, asip_d_Header_To, to);
-	asip_m_addHeader(&mess, "ip", ip);
+	asip_m_addHeader(&mess, "id", id);
+	asip_m_addHeader(&mess, "port2", port);
 	char buf[1000];
 	int n = asip_m_toStringMess(mess, 1000, buf);
 	n = sendto(sockfd, buf, n, 0, (struct sockaddr*) ser,
@@ -110,7 +117,7 @@ int asock_m_Invite(char *callee, char *caller, char *id,
 		buff[err] = '\0';
 	}
 	int res = -1;
-	printf("header la : %s \n",buff);
+//	printf("header la : %s \n", buff);
 	asip_m_parseMess(&respone, buff);
 	char *type = asip_m_findHeaderValue(respone, asip_d_Header_Type);
 	if (type == null) {
@@ -150,11 +157,7 @@ int asock_m_register(char *name, char *out, struct sockaddr_in *ser, int sockfd)
 		printf("loi gui data register");
 		return -1;
 	}
-	struct sockaddr_in cliaddr;
-	socklen_t len = sizeof(cliaddr);
-	memset(&cliaddr, 0, sizeof(cliaddr));
-	err = recvfrom(sockfd, buff, 1000,
-	MSG_WAITALL, (struct sockaddr*) &cliaddr, (socklen_t*) &len);
+	err = recv(sockfd, buff, 1000, MSG_WAITALL);
 	if (err < 1) {
 		printf("loi nhan data register");
 		return -1;

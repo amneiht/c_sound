@@ -50,7 +50,7 @@ char userid[30];
 void testStream() {
 	initFormat();
 	struct sockaddr_in ser;
-	ser.sin_addr.s_addr = inet_addr("192.168.2.100");
+	ser.sin_addr.s_addr = inet_addr("192.168.2.103");
 	ser.sin_port = htons(10000);
 	ser.sin_family = AF_INET;
 	int sockfd = asock_m_UdpServerSocket(10000);
@@ -69,7 +69,7 @@ void testStream() {
 	pthread_join(a_call, NULL); // doi huy luong
 	pthread_join(a_send, NULL); // doi huy luong
 }
-int maincls(int argc, char **argv) {
+int main(int argc, char **argv) {
 
 //	testStream();
 	return console_app();
@@ -165,12 +165,13 @@ void sip_login(int *sock, char **buff, int leng, struct sockaddr_in *ser,
 	for (int i = 0; i <= stl; i++) {
 		user[i] = buff[1][i];
 	}
+	close(*sock);
 	char *ip, *port;
 	if (leng == 4) {
 		ip = buff[2];
 		port = buff[3];
 	} else {
-		ip = "localhost";
+		ip = "192.168.2.103";
 		port = "9981";
 	}
 	int sp = asock_m_UdpSocket();
@@ -186,6 +187,7 @@ void sip_login(int *sock, char **buff, int leng, struct sockaddr_in *ser,
 	ser->sin_port = ntohs(d);
 	*sock = sp;
 	asock_m_register(user, id, ser, sp);
+	printf("your id is %s\n", id);
 	sip_ser = 0;
 	pthread_join(_sip, NULL);
 	sip_ser = 1;
@@ -294,7 +296,7 @@ void* AudioStream(void *x) {
 		}
 		UlawArrayEncode(buf, BUFSIZE, out);
 		artp_sendto(&header, out, sizeout, ser, sock);
-//		artp_sendto(&header, test, strlen(test), ser, sock);
+//		artp_sendto(&header, userid, strlen(userid), ser, sock);
 //		sleep(1);
 	}
 
@@ -318,6 +320,7 @@ void* AudioGet(void *x) {
 		goto finish;
 	}
 	artp_header header;
+	int i = 0;
 	int n;
 	while (run) {
 		n = artp_recvfrom(&header, buff, sockfd);
@@ -328,7 +331,8 @@ void* AudioGet(void *x) {
 						pa_strerror(error));
 				goto finish;
 			}
-//			printf("%s nhan data tu :%s \n", user, buff);
+//		i++;
+//		printf("%s nhan data tu :%s lan thu %d \n", user, buff, i);
 		}
 	}
 	finish: if (s != NULL)
@@ -366,56 +370,3 @@ int praseParameters(char *str, char **mg) {
 		vt++;
 	return vt;
 }
-//void* AudioGetOld(void *x) { // socket
-//
-//	int sockfd = *((int*) x);
-//	int8_t buff[500];
-//	int16_t play[500];
-//	int n;
-//	AudioFormat af;
-//	am_audio_m_g729(am_audio_playback, &af);
-//	DataLine *line;
-//	am_audio_m_openAudio(&af, &line);
-//	artp_header header;
-//	while (run) {
-//		n = artp_recvfrom(&header, buff, sockfd);
-//		if (n > 0) {
-//			UlawArrayDecode(buff, n, play);
-//			am_audio_m_write(line, play, n);
-//			printf("sss %d\n", n);
-//		} else {
-//
-//			printf("wwtf\n");
-//		}
-//	}
-//	is_call = 0;
-//	close(sockfd);
-//	am_audio_m_close(line);
-//	return null;
-//}
-//void* AudioStreamOld(void *x) {
-//	struct sockaddr_in *ser = (struct sockaddr_in*) x;
-//	int8_t send[500];
-//	int16_t get[500];
-//	int size = 160;
-//	artp_header header;
-//	memset(&header, 0, sizeof(header));
-//	header.sep = 12;
-//	header.group = 1;
-//	header.id = rand() % 1000;
-//	AudioFormat af;
-//	int sock = asock_m_UdpSocket();
-//	am_audio_m_g729(am_audio_capture, &af);
-//	DataLine *line;
-//	am_audio_m_openAudio(&af, &line);
-//	while (run) {
-//		int n = am_audio_m_read(line, get, size);
-//		if (n > 0) {
-//			UlawArrayEncode(get, n, send);
-//			artp_sendto(&header, send, n, ser, sock);
-//		}
-//	}
-//	close(sock);
-//	am_audio_m_close(line);
-//	return NULL;
-//}

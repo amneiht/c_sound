@@ -114,7 +114,7 @@ void info(char *dev_name, snd_pcm_stream_t stream) {
 	}
 	printf("max buffer size in frames %ld\n", frames);
 }
-int main(int argc, char *argv[]) {
+int maininf(int argc, char *argv[]) {
 //	int i;
 //	int err;
 //	int buf[128];
@@ -125,7 +125,9 @@ int main(int argc, char *argv[]) {
 //		fprintf(stderr, "Usage: %s card\n", argv[0]);
 //		exit(1);
 //	}
-	char device[] = "surround71";
+	char *device = "oss";
+	if (argc > 1)
+		device = argv[1];
 	printf("*********** CAPTURE ***********\n");
 	info(device, SND_PCM_STREAM_CAPTURE);
 	printf("*********** PLAYBACK ***********\n");

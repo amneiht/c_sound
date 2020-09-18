@@ -4,8 +4,6 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../src/test/old/TestAudio.c \
-../src/test/old/TestInter.c \
 ../src/test/old/TestPluse.c \
 ../src/test/old/TestPulse.c \
 ../src/test/old/TestRtp.c \
@@ -13,12 +11,9 @@ C_SRCS += \
 ../src/test/old/TestThread.c \
 ../src/test/old/Testalsa.c \
 ../src/test/old/testSocketClose.c \
-../src/test/old/testSound.c \
 ../src/test/old/testStream.c 
 
 OBJS += \
-./src/test/old/TestAudio.o \
-./src/test/old/TestInter.o \
 ./src/test/old/TestPluse.o \
 ./src/test/old/TestPulse.o \
 ./src/test/old/TestRtp.o \
@@ -26,12 +21,9 @@ OBJS += \
 ./src/test/old/TestThread.o \
 ./src/test/old/Testalsa.o \
 ./src/test/old/testSocketClose.o \
-./src/test/old/testSound.o \
 ./src/test/old/testStream.o 
 
 C_DEPS += \
-./src/test/old/TestAudio.d \
-./src/test/old/TestInter.d \
 ./src/test/old/TestPluse.d \
 ./src/test/old/TestPulse.d \
 ./src/test/old/TestRtp.d \
@@ -39,7 +31,6 @@ C_DEPS += \
 ./src/test/old/TestThread.d \
 ./src/test/old/Testalsa.d \
 ./src/test/old/testSocketClose.d \
-./src/test/old/testSound.d \
 ./src/test/old/testStream.d 
 
 

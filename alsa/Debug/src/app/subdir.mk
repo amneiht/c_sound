@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/app/alsamode.c \
 ../src/app/console.c 
 
 OBJS += \
+./src/app/alsamode.o \
 ./src/app/console.o 
 
 C_DEPS += \
+./src/app/alsamode.d \
 ./src/app/console.d 
 
 
